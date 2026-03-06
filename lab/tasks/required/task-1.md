@@ -196,7 +196,7 @@ The code stubs in `backend/app/etl.py` contain detailed TODOs.
 1. Start the `Qwen code` coding agent in the terminal inside the project directory.
 2. Give it a prompt that asks for planning, implementation, and explanation:
 
-   > "Read the TODO comments in `backend/app/etl.py` and implement all five functions. Use the existing models in `backend/app/models/` and the settings in `backend/app/settings.py`. The API uses HTTP Basic Auth. First give me a short numbered plan, then implement function-by-function, and explain each function step by step as if teaching a junior engineer."
+   > "Read the TODO comments in `backend/app/etl.py` and implement all five functions one by one. Use the existing models in `backend/app/models/` and the settings in `backend/app/settings.py`. The API uses HTTP Basic Auth. First give me a short numbered plan, then implement a function, deploy locally, then test, report to me what exactly you've done and explain each function step by step as if teaching a junior engineer. Then confirm with me and proceed to the next function."
 
 3. Wait for the agent to generate the implementation.
 
@@ -223,11 +223,11 @@ The code stubs in `backend/app/etl.py` contain detailed TODOs.
    docker compose --env-file .env.docker.secret up --build -d
    ```
 
-2. Open [`Swagger UI`](../../../wiki/swagger.md#what-is-swagger-ui) at `http://localhost:<caddy-port>/docs`.
+2. Open `Swagger UI` at http://localhost:42002/docs.
 
-   Replace [`<caddy-port>`](../../../wiki/caddy.md#caddy-port).
+   `42002` is the default `CADDY_PORT` from `.env.docker.secret`. If you changed it, use your value instead.
 
-3. [Authorize](../../../wiki/swagger.md#authorize-in-swagger-ui) with your [`API_KEY`](../../../wiki/dotenv-docker-secret.md#api_key).
+3. Authorize with your `API_KEY`.
 
 4. Trigger the pipeline: expand `POST /pipeline/sync`, click `Try it out`, then `Execute`.
 
@@ -329,14 +329,11 @@ The code stubs in `backend/app/etl.py` contain detailed TODOs.
    docker compose --env-file .env.docker.secret up --build -d
    ```
 
-2. Open [`Swagger UI`](../../../wiki/swagger.md#what-is-swagger-ui) at `http://<your-vm-ip-address>:<caddy-port>/docs`.
+2. Open `Swagger UI` at `http://<your-vm-ip-address>:42002/docs`.
 
-   Replace:
+   Replace `<your-vm-ip-address>` with your VM's IP address. If you changed `CADDY_PORT`, use your value instead of `42002`.
 
-   - [`<your-vm-ip-address>`](../../../wiki/vm.md#your-vm-ip-address)
-   - [`<caddy-port>`](../../../wiki/caddy.md#caddy-port)
-
-3. [Authorize](../../../wiki/swagger.md#authorize-in-swagger-ui) with your [`API_KEY`](../../../wiki/dotenv-docker-secret.md#api_key), then run `POST /pipeline/sync` once.
+3. Authorize with your `API_KEY`, then run `POST /pipeline/sync` once.
 
    You should get `200` with `new_records` and `total_records`.
 
