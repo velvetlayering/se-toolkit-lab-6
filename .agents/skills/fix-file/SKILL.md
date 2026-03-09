@@ -1,5 +1,5 @@
 ---
-name: fix-file-by-conventions
+name: fix-file
 description: Fix convention violations found by /review-file
 argument-hint: "<path>"
 ---
