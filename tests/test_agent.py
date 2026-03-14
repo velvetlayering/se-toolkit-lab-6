@@ -85,3 +85,37 @@ def test_wiki_files_question_uses_list_files():
 
     # Check answer is non-empty
     assert len(data["answer"]) > 0, "Answer is empty"
+
+
+def test_framework_question_uses_read_file():
+    """Test that a framework question triggers read_file on source code."""
+    data, stderr = run_agent("What Python web framework does the backend use?")
+
+    # Check required fields
+    assert "answer" in data, "Missing 'answer' field"
+    assert "tool_calls" in data, "Missing 'tool_calls' field"
+
+    # Check that read_file was used
+    tools_used = [tc.get("tool") for tc in data["tool_calls"]]
+    assert "read_file" in tools_used, f"Expected read_file in tool_calls, got: {tools_used}"
+
+    # Check answer mentions FastAPI
+    assert "FastAPI" in data["answer"], f"Answer should mention FastAPI, got: {data['answer'][:200]}"
+
+
+def test_database_count_uses_query_api():
+    """Test that a database count question triggers query_api tool."""
+    data, stderr = run_agent("How many items are in the database?")
+
+    # Check required fields
+    assert "answer" in data, "Missing 'answer' field"
+    assert "tool_calls" in data, "Missing 'tool_calls' field"
+
+    # Check that query_api was used
+    tools_used = [tc.get("tool") for tc in data["tool_calls"]]
+    assert "query_api" in tools_used, f"Expected query_api in tool_calls, got: {tools_used}"
+
+    # Check answer contains a number
+    import re
+    numbers = re.findall(r'\d+', data["answer"])
+    assert len(numbers) > 0, f"Answer should contain a number, got: {data['answer'][:200]}"
